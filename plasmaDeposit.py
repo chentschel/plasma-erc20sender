@@ -4,7 +4,8 @@ from web3 import Web3, WebsocketProvider
 from eth_account import Account
 
 NETWORK="ropsten"
-PROVIDER="wss://{}.infura.io/ws/v3/4427dca984be4ed983bba5a77f3855b4".format(NETWORK)
+INFURA_APPID='xxxxx'
+PROVIDER="wss://{}.infura.io/ws/v3/{}".format(NETWORK, INFURA_APPID)
 
 PLASMA_ROOT="0x60e2b19b9a87a3f37827f2c8c8306be718a5f9b4"
 
