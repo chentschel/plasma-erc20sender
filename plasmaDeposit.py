@@ -3,11 +3,11 @@
 from web3 import Web3, WebsocketProvider
 from eth_account import Account
 
-NETWORK="ropsten"
-INFURA_APPID='xxxxx'
-PROVIDER="wss://{}.infura.io/ws/v3/{}".format(NETWORK, INFURA_APPID)
+NETWORK="mainnet"
+PLASMA_ROOT="0xb3Fe6f0eB663DbE4D4813Ee32d6f30d64640D2f8"
 
-PLASMA_ROOT="0x60e2b19b9a87a3f37827f2c8c8306be718a5f9b4"
+INFURA_APPID='4427dca984be4ed983bba5a77f3855b4'
+PROVIDER="wss://{}.infura.io/ws/v3/{}".format(NETWORK, INFURA_APPID)
 
 APPROVE_ABI = '[\
     {\
@@ -30,11 +30,11 @@ DEPOSIT_ABI = '[\
     {\
         "constant": false,\
         "inputs": [\
-            { "internalType": "address", "name": "token", "type": "address" },\
-            { "internalType": "address", "name": "user", "type": "address" },\
-            { "internalType": "uint256", "name": "amount", "type": "uint256" }\
+            { "internalType": "address", "name": "_token", "type": "address" },\
+            { "internalType": "address", "name": "_user", "type": "address" },\
+            { "internalType": "uint256", "name": "_amount", "type": "uint256" }\
         ],\
-        "name": "deposit",\
+        "name": "depositERC20ForUser",\
         "outputs": [],\
         "payable": false,\
         "stateMutability": "nonpayable",\
@@ -44,13 +44,11 @@ DEPOSIT_ABI = '[\
 
 if __name__ == "__main__":
 
-    print('Using network: {}'.format(NETWORK))
+    tokenAddress = input("{} Token (ERC20) address: ".format(NETWORK))
+    tokenAmount = input("Amount (wei): ")
 
-    tokenAddress = input("ERC20 addess:")
-    tokenAmount = input("Amount:")
-
-    key = input('Private key (from):')
-    mappedAddress = input("Plasma (to) address:")
+    key = input("Private key (from): ")
+    mappedAddress = input("Mapped plasma (to) address: ")
 
     w3 = Web3(WebsocketProvider(PROVIDER))
 
@@ -89,7 +87,7 @@ if __name__ == "__main__":
     receipt = w3.eth.waitForTransactionReceipt(txHash)
 
     # Deposit
-    transferTx = plasmaRoot.functions.deposit(
+    transferTx = plasmaRoot.functions.depositERC20ForUser(
         w3.toChecksumAddress(tokenAddress),
         w3.toChecksumAddress(mappedAddress),
         w3.toInt(text=tokenAmount)
